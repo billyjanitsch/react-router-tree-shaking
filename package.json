@@ -1,0 +1,20 @@
+{
+  "name": "react-router-tree-shaking",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack-command"
+  },
+  "keywords": [],
+  "author": "Billy Janitsch <billy@kensho.com> (https://billyjanitsch.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^16.6.1",
+    "react-router-dom": "4.4.0-beta.6"
+  },
+  "devDependencies": {
+    "webpack": "^4.25.1",
+    "webpack-command": "^0.4.2"
+  }
+}
