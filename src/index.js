@@ -1,3 +1,3 @@
-import {BrowserRouter} from 'react-router-dom'
+import * as router from 'react-router-dom'
 
-console.log(BrowserRouter)
+console.log(router)
