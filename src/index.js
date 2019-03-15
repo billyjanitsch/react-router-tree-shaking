@@ -1,3 +1,5 @@
-import {BrowserRouter} from 'react-router-dom'
+import { createBrowserHistory } from 'history';
+import { Router } from 'react-router-dom';
 
-console.log(BrowserRouter)
+console.log(createBrowserHistory);
+console.log(Router);
