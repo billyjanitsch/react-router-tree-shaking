@@ -73,6 +73,9 @@
     module.exports = __webpack_require__(7);
   },
   function(module, exports, __webpack_require__) {
+    module.exports = __webpack_require__(9)();
+  },
+  function(module, exports, __webpack_require__) {
     var isarray = __webpack_require__(16);
     (module.exports = pathToRegexp),
       (module.exports.parse = parse),
@@ -335,9 +338,7 @@
       );
     }
   },
-  function(module, exports, __webpack_require__) {
-    module.exports = __webpack_require__(10)();
-  },
+  ,
   function(module, exports, __webpack_require__) {
     "use strict";
     module.exports = __webpack_require__(17);
@@ -346,7 +347,7 @@
     "use strict";
     exports.__esModule = !0;
     var _react2 = _interopRequireDefault(__webpack_require__(0)),
-      _implementation2 = _interopRequireDefault(__webpack_require__(9));
+      _implementation2 = _interopRequireDefault(__webpack_require__(11));
     function _interopRequireDefault(obj) {
       return obj && obj.__esModule ? obj : { default: obj };
     }
@@ -356,7 +357,7 @@
   },
   function(module, exports, __webpack_require__) {
     "use strict";
-    var ReactIs = __webpack_require__(3),
+    var ReactIs = __webpack_require__(4),
       REACT_STATICS = {
         childContextTypes: !0,
         contextType: !0,
@@ -452,7 +453,6 @@
       return targetComponent;
     };
   },
-  ,
   function(module, exports, __webpack_require__) {
     "use strict";
     /** @license React v16.8.3
@@ -922,10 +922,65 @@ object-assign
   },
   function(module, exports, __webpack_require__) {
     "use strict";
+    var ReactPropTypesSecret = __webpack_require__(10);
+    function emptyFunction() {}
+    function emptyFunctionWithReset() {}
+    (emptyFunctionWithReset.resetWarningCache = emptyFunction),
+      (module.exports = function() {
+        function shim(
+          props,
+          propName,
+          componentName,
+          location,
+          propFullName,
+          secret
+        ) {
+          if (secret !== ReactPropTypesSecret) {
+            var err = new Error(
+              "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
+            );
+            throw ((err.name = "Invariant Violation"), err);
+          }
+        }
+        function getShim() {
+          return shim;
+        }
+        shim.isRequired = shim;
+        var ReactPropTypes = {
+          array: shim,
+          bool: shim,
+          func: shim,
+          number: shim,
+          object: shim,
+          string: shim,
+          symbol: shim,
+          any: shim,
+          arrayOf: getShim,
+          element: shim,
+          elementType: shim,
+          instanceOf: getShim,
+          node: shim,
+          objectOf: getShim,
+          oneOf: getShim,
+          oneOfType: getShim,
+          shape: getShim,
+          exact: getShim,
+          checkPropTypes: emptyFunctionWithReset,
+          resetWarningCache: emptyFunction
+        };
+        return (ReactPropTypes.PropTypes = ReactPropTypes), ReactPropTypes;
+      });
+  },
+  function(module, exports, __webpack_require__) {
+    "use strict";
+    module.exports = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+  },
+  function(module, exports, __webpack_require__) {
+    "use strict";
     exports.__esModule = !0;
     var _react = __webpack_require__(0),
       _propTypes2 = (_interopRequireDefault(_react),
-      _interopRequireDefault(__webpack_require__(2))),
+      _interopRequireDefault(__webpack_require__(1))),
       _gud2 = _interopRequireDefault(__webpack_require__(12));
     _interopRequireDefault(__webpack_require__(14));
     function _interopRequireDefault(obj) {
@@ -1104,61 +1159,6 @@ object-assign
       );
     }),
       (module.exports = exports.default);
-  },
-  function(module, exports, __webpack_require__) {
-    "use strict";
-    var ReactPropTypesSecret = __webpack_require__(11);
-    function emptyFunction() {}
-    function emptyFunctionWithReset() {}
-    (emptyFunctionWithReset.resetWarningCache = emptyFunction),
-      (module.exports = function() {
-        function shim(
-          props,
-          propName,
-          componentName,
-          location,
-          propFullName,
-          secret
-        ) {
-          if (secret !== ReactPropTypesSecret) {
-            var err = new Error(
-              "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types"
-            );
-            throw ((err.name = "Invariant Violation"), err);
-          }
-        }
-        function getShim() {
-          return shim;
-        }
-        shim.isRequired = shim;
-        var ReactPropTypes = {
-          array: shim,
-          bool: shim,
-          func: shim,
-          number: shim,
-          object: shim,
-          string: shim,
-          symbol: shim,
-          any: shim,
-          arrayOf: getShim,
-          element: shim,
-          elementType: shim,
-          instanceOf: getShim,
-          node: shim,
-          objectOf: getShim,
-          oneOf: getShim,
-          oneOfType: getShim,
-          shape: getShim,
-          exact: getShim,
-          checkPropTypes: emptyFunctionWithReset,
-          resetWarningCache: emptyFunction
-        };
-        return (ReactPropTypes.PropTypes = ReactPropTypes), ReactPropTypes;
-      });
-  },
-  function(module, exports, __webpack_require__) {
-    "use strict";
-    module.exports = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
   },
   function(module, exports, __webpack_require__) {
     "use strict";
@@ -1365,46 +1365,87 @@ object-assign
     }
     __webpack_require__.r(__webpack_exports__);
     var resolve_pathname = function(to) {
-      var from =
-          arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "",
-        toParts = (to && to.split("/")) || [],
-        fromParts = (from && from.split("/")) || [],
-        isToAbs = to && isAbsolute(to),
-        isFromAbs = from && isAbsolute(from),
-        mustEndAbs = isToAbs || isFromAbs;
-      if (
-        (to && isAbsolute(to)
-          ? (fromParts = toParts)
-          : toParts.length &&
-            (fromParts.pop(), (fromParts = fromParts.concat(toParts))),
-        !fromParts.length)
-      )
-        return "/";
-      var hasTrailingSlash = void 0;
-      if (fromParts.length) {
-        var last = fromParts[fromParts.length - 1];
-        hasTrailingSlash = "." === last || ".." === last || "" === last;
-      } else hasTrailingSlash = !1;
-      for (var up = 0, i = fromParts.length; i >= 0; i--) {
-        var part = fromParts[i];
-        "." === part
-          ? spliceOne(fromParts, i)
-          : ".." === part
-          ? (spliceOne(fromParts, i), up++)
-          : up && (spliceOne(fromParts, i), up--);
-      }
-      if (!mustEndAbs) for (; up--; up) fromParts.unshift("..");
-      !mustEndAbs ||
-        "" === fromParts[0] ||
-        (fromParts[0] && isAbsolute(fromParts[0])) ||
-        fromParts.unshift("");
-      var result = fromParts.join("/");
-      return (
-        hasTrailingSlash && "/" !== result.substr(-1) && (result += "/"), result
-      );
-    };
-    "function" == typeof Symbol && Symbol.iterator;
-    var isProduction = !0,
+        var from =
+            arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "",
+          toParts = (to && to.split("/")) || [],
+          fromParts = (from && from.split("/")) || [],
+          isToAbs = to && isAbsolute(to),
+          isFromAbs = from && isAbsolute(from),
+          mustEndAbs = isToAbs || isFromAbs;
+        if (
+          (to && isAbsolute(to)
+            ? (fromParts = toParts)
+            : toParts.length &&
+              (fromParts.pop(), (fromParts = fromParts.concat(toParts))),
+          !fromParts.length)
+        )
+          return "/";
+        var hasTrailingSlash = void 0;
+        if (fromParts.length) {
+          var last = fromParts[fromParts.length - 1];
+          hasTrailingSlash = "." === last || ".." === last || "" === last;
+        } else hasTrailingSlash = !1;
+        for (var up = 0, i = fromParts.length; i >= 0; i--) {
+          var part = fromParts[i];
+          "." === part
+            ? spliceOne(fromParts, i)
+            : ".." === part
+            ? (spliceOne(fromParts, i), up++)
+            : up && (spliceOne(fromParts, i), up--);
+        }
+        if (!mustEndAbs) for (; up--; up) fromParts.unshift("..");
+        !mustEndAbs ||
+          "" === fromParts[0] ||
+          (fromParts[0] && isAbsolute(fromParts[0])) ||
+          fromParts.unshift("");
+        var result = fromParts.join("/");
+        return (
+          hasTrailingSlash && "/" !== result.substr(-1) && (result += "/"),
+          result
+        );
+      },
+      _typeof =
+        "function" == typeof Symbol && "symbol" == typeof Symbol.iterator
+          ? function(obj) {
+              return typeof obj;
+            }
+          : function(obj) {
+              return obj &&
+                "function" == typeof Symbol &&
+                obj.constructor === Symbol &&
+                obj !== Symbol.prototype
+                ? "symbol"
+                : typeof obj;
+            };
+    var value_equal = function valueEqual(a, b) {
+        if (a === b) return !0;
+        if (null == a || null == b) return !1;
+        if (Array.isArray(a))
+          return (
+            Array.isArray(b) &&
+            a.length === b.length &&
+            a.every(function(item, index) {
+              return valueEqual(item, b[index]);
+            })
+          );
+        var aType = void 0 === a ? "undefined" : _typeof(a);
+        if (aType !== (void 0 === b ? "undefined" : _typeof(b))) return !1;
+        if ("object" === aType) {
+          var aValue = a.valueOf(),
+            bValue = b.valueOf();
+          if (aValue !== a || bValue !== b) return valueEqual(aValue, bValue);
+          var aKeys = Object.keys(a),
+            bKeys = Object.keys(b);
+          return (
+            aKeys.length === bKeys.length &&
+            aKeys.every(function(key) {
+              return valueEqual(a[key], b[key]);
+            })
+          );
+        }
+        return !1;
+      },
+      isProduction = !0,
       prefix = "Invariant failed";
     var tiny_invariant_esm = function(condition, message) {
       if (!condition)
@@ -1414,6 +1455,9 @@ object-assign
     };
     function addLeadingSlash(path) {
       return "/" === path.charAt(0) ? path : "/" + path;
+    }
+    function stripLeadingSlash(path) {
+      return "/" === path.charAt(0) ? path.substr(1) : path;
     }
     function stripBasename(path, prefix) {
       return (function(path, prefix) {
@@ -1501,6 +1545,15 @@ object-assign
         location
       );
     }
+    function locationsAreEqual(a, b) {
+      return (
+        a.pathname === b.pathname &&
+        a.search === b.search &&
+        a.hash === b.hash &&
+        a.key === b.key &&
+        value_equal(a.state, b.state)
+      );
+    }
     function createTransitionManager() {
       var prompt = null;
       var listeners = [];
@@ -1574,11 +1627,432 @@ object-assign
         return {};
       }
     }
+    function createBrowserHistory(props) {
+      void 0 === props && (props = {}), canUseDOM || tiny_invariant_esm(!1);
+      var ua,
+        globalHistory = window.history,
+        canUseHistory =
+          ((-1 === (ua = window.navigator.userAgent).indexOf("Android 2.") &&
+            -1 === ua.indexOf("Android 4.0")) ||
+            -1 === ua.indexOf("Mobile Safari") ||
+            -1 !== ua.indexOf("Chrome") ||
+            -1 !== ua.indexOf("Windows Phone")) &&
+          window.history &&
+          "pushState" in window.history,
+        needsHashChangeListener = !(
+          -1 === window.navigator.userAgent.indexOf("Trident")
+        ),
+        _props = props,
+        _props$forceRefresh = _props.forceRefresh,
+        forceRefresh = void 0 !== _props$forceRefresh && _props$forceRefresh,
+        _props$getUserConfirm = _props.getUserConfirmation,
+        getUserConfirmation =
+          void 0 === _props$getUserConfirm
+            ? getConfirmation
+            : _props$getUserConfirm,
+        _props$keyLength = _props.keyLength,
+        keyLength = void 0 === _props$keyLength ? 6 : _props$keyLength,
+        basename = props.basename
+          ? stripTrailingSlash(addLeadingSlash(props.basename))
+          : "";
+      function getDOMLocation(historyState) {
+        var _ref = historyState || {},
+          key = _ref.key,
+          state = _ref.state,
+          _window$location = window.location,
+          path =
+            _window$location.pathname +
+            _window$location.search +
+            _window$location.hash;
+        return (
+          basename && (path = stripBasename(path, basename)),
+          createLocation(path, state, key)
+        );
+      }
+      function createKey() {
+        return Math.random()
+          .toString(36)
+          .substr(2, keyLength);
+      }
+      var transitionManager = createTransitionManager();
+      function setState(nextState) {
+        _extends(history, nextState),
+          (history.length = globalHistory.length),
+          transitionManager.notifyListeners(history.location, history.action);
+      }
+      function handlePopState(event) {
+        (function(event) {
+          void 0 === event.state && navigator.userAgent.indexOf("CriOS");
+        })(event) || handlePop(getDOMLocation(event.state));
+      }
+      function handleHashChange() {
+        handlePop(getDOMLocation(getHistoryState()));
+      }
+      var forceNextPop = !1;
+      function handlePop(location) {
+        if (forceNextPop) (forceNextPop = !1), setState();
+        else {
+          transitionManager.confirmTransitionTo(
+            location,
+            "POP",
+            getUserConfirmation,
+            function(ok) {
+              ok
+                ? setState({ action: "POP", location: location })
+                : (function(fromLocation) {
+                    var toLocation = history.location,
+                      toIndex = allKeys.indexOf(toLocation.key);
+                    -1 === toIndex && (toIndex = 0);
+                    var fromIndex = allKeys.indexOf(fromLocation.key);
+                    -1 === fromIndex && (fromIndex = 0);
+                    var delta = toIndex - fromIndex;
+                    delta && ((forceNextPop = !0), go(delta));
+                  })(location);
+            }
+          );
+        }
+      }
+      var initialLocation = getDOMLocation(getHistoryState()),
+        allKeys = [initialLocation.key];
+      function createHref(location) {
+        return basename + createPath(location);
+      }
+      function go(n) {
+        globalHistory.go(n);
+      }
+      var listenerCount = 0;
+      function checkDOMListeners(delta) {
+        1 === (listenerCount += delta)
+          ? (window.addEventListener(PopStateEvent, handlePopState),
+            needsHashChangeListener &&
+              window.addEventListener(HashChangeEvent, handleHashChange))
+          : 0 === listenerCount &&
+            (window.removeEventListener(PopStateEvent, handlePopState),
+            needsHashChangeListener &&
+              window.removeEventListener(HashChangeEvent, handleHashChange));
+      }
+      var isBlocked = !1;
+      var history = {
+        length: globalHistory.length,
+        action: "POP",
+        location: initialLocation,
+        createHref: createHref,
+        push: function(path, state) {
+          var location = createLocation(
+            path,
+            state,
+            createKey(),
+            history.location
+          );
+          transitionManager.confirmTransitionTo(
+            location,
+            "PUSH",
+            getUserConfirmation,
+            function(ok) {
+              if (ok) {
+                var href = createHref(location),
+                  key = location.key,
+                  state = location.state;
+                if (canUseHistory)
+                  if (
+                    (globalHistory.pushState(
+                      { key: key, state: state },
+                      null,
+                      href
+                    ),
+                    forceRefresh)
+                  )
+                    window.location.href = href;
+                  else {
+                    var prevIndex = allKeys.indexOf(history.location.key),
+                      nextKeys = allKeys.slice(
+                        0,
+                        -1 === prevIndex ? 0 : prevIndex + 1
+                      );
+                    nextKeys.push(location.key),
+                      (allKeys = nextKeys),
+                      setState({ action: "PUSH", location: location });
+                  }
+                else window.location.href = href;
+              }
+            }
+          );
+        },
+        replace: function(path, state) {
+          var location = createLocation(
+            path,
+            state,
+            createKey(),
+            history.location
+          );
+          transitionManager.confirmTransitionTo(
+            location,
+            "REPLACE",
+            getUserConfirmation,
+            function(ok) {
+              if (ok) {
+                var href = createHref(location),
+                  key = location.key,
+                  state = location.state;
+                if (canUseHistory)
+                  if (
+                    (globalHistory.replaceState(
+                      { key: key, state: state },
+                      null,
+                      href
+                    ),
+                    forceRefresh)
+                  )
+                    window.location.replace(href);
+                  else {
+                    var prevIndex = allKeys.indexOf(history.location.key);
+                    -1 !== prevIndex && (allKeys[prevIndex] = location.key),
+                      setState({ action: "REPLACE", location: location });
+                  }
+                else window.location.replace(href);
+              }
+            }
+          );
+        },
+        go: go,
+        goBack: function() {
+          go(-1);
+        },
+        goForward: function() {
+          go(1);
+        },
+        block: function(prompt) {
+          void 0 === prompt && (prompt = !1);
+          var unblock = transitionManager.setPrompt(prompt);
+          return (
+            isBlocked || (checkDOMListeners(1), (isBlocked = !0)),
+            function() {
+              return (
+                isBlocked && ((isBlocked = !1), checkDOMListeners(-1)),
+                unblock()
+              );
+            }
+          );
+        },
+        listen: function(listener) {
+          var unlisten = transitionManager.appendListener(listener);
+          return (
+            checkDOMListeners(1),
+            function() {
+              checkDOMListeners(-1), unlisten();
+            }
+          );
+        }
+      };
+      return history;
+    }
+    var HashChangeEvent$1 = "hashchange",
+      HashPathCoders = {
+        hashbang: {
+          encodePath: function(path) {
+            return "!" === path.charAt(0)
+              ? path
+              : "!/" + stripLeadingSlash(path);
+          },
+          decodePath: function(path) {
+            return "!" === path.charAt(0) ? path.substr(1) : path;
+          }
+        },
+        noslash: { encodePath: stripLeadingSlash, decodePath: addLeadingSlash },
+        slash: { encodePath: addLeadingSlash, decodePath: addLeadingSlash }
+      };
+    function getHashPath() {
+      var href = window.location.href,
+        hashIndex = href.indexOf("#");
+      return -1 === hashIndex ? "" : href.substring(hashIndex + 1);
+    }
+    function replaceHashPath(path) {
+      var hashIndex = window.location.href.indexOf("#");
+      window.location.replace(
+        window.location.href.slice(0, hashIndex >= 0 ? hashIndex : 0) +
+          "#" +
+          path
+      );
+    }
+    function createHashHistory(props) {
+      void 0 === props && (props = {}), canUseDOM || tiny_invariant_esm(!1);
+      var globalHistory = window.history,
+        _props = (window.navigator.userAgent.indexOf("Firefox"), props),
+        _props$getUserConfirm = _props.getUserConfirmation,
+        getUserConfirmation =
+          void 0 === _props$getUserConfirm
+            ? getConfirmation
+            : _props$getUserConfirm,
+        _props$hashType = _props.hashType,
+        hashType = void 0 === _props$hashType ? "slash" : _props$hashType,
+        basename = props.basename
+          ? stripTrailingSlash(addLeadingSlash(props.basename))
+          : "",
+        _HashPathCoders$hashT = HashPathCoders[hashType],
+        encodePath = _HashPathCoders$hashT.encodePath,
+        decodePath = _HashPathCoders$hashT.decodePath;
+      function getDOMLocation() {
+        var path = decodePath(getHashPath());
+        return (
+          basename && (path = stripBasename(path, basename)),
+          createLocation(path)
+        );
+      }
+      var transitionManager = createTransitionManager();
+      function setState(nextState) {
+        _extends(history, nextState),
+          (history.length = globalHistory.length),
+          transitionManager.notifyListeners(history.location, history.action);
+      }
+      var forceNextPop = !1,
+        ignorePath = null;
+      function handleHashChange() {
+        var path = getHashPath(),
+          encodedPath = encodePath(path);
+        if (path !== encodedPath) replaceHashPath(encodedPath);
+        else {
+          var location = getDOMLocation(),
+            prevLocation = history.location;
+          if (!forceNextPop && locationsAreEqual(prevLocation, location))
+            return;
+          if (ignorePath === createPath(location)) return;
+          (ignorePath = null),
+            (function(location) {
+              if (forceNextPop) (forceNextPop = !1), setState();
+              else {
+                transitionManager.confirmTransitionTo(
+                  location,
+                  "POP",
+                  getUserConfirmation,
+                  function(ok) {
+                    ok
+                      ? setState({ action: "POP", location: location })
+                      : (function(fromLocation) {
+                          var toLocation = history.location,
+                            toIndex = allPaths.lastIndexOf(
+                              createPath(toLocation)
+                            );
+                          -1 === toIndex && (toIndex = 0);
+                          var fromIndex = allPaths.lastIndexOf(
+                            createPath(fromLocation)
+                          );
+                          -1 === fromIndex && (fromIndex = 0);
+                          var delta = toIndex - fromIndex;
+                          delta && ((forceNextPop = !0), go(delta));
+                        })(location);
+                  }
+                );
+              }
+            })(location);
+        }
+      }
+      var path = getHashPath(),
+        encodedPath = encodePath(path);
+      path !== encodedPath && replaceHashPath(encodedPath);
+      var initialLocation = getDOMLocation(),
+        allPaths = [createPath(initialLocation)];
+      function go(n) {
+        globalHistory.go(n);
+      }
+      var listenerCount = 0;
+      function checkDOMListeners(delta) {
+        1 === (listenerCount += delta)
+          ? window.addEventListener(HashChangeEvent$1, handleHashChange)
+          : 0 === listenerCount &&
+            window.removeEventListener(HashChangeEvent$1, handleHashChange);
+      }
+      var isBlocked = !1;
+      var history = {
+        length: globalHistory.length,
+        action: "POP",
+        location: initialLocation,
+        createHref: function(location) {
+          return "#" + encodePath(basename + createPath(location));
+        },
+        push: function(path, state) {
+          var location = createLocation(path, void 0, void 0, history.location);
+          transitionManager.confirmTransitionTo(
+            location,
+            "PUSH",
+            getUserConfirmation,
+            function(ok) {
+              if (ok) {
+                var path = createPath(location),
+                  encodedPath = encodePath(basename + path);
+                if (getHashPath() !== encodedPath) {
+                  (ignorePath = path),
+                    (function(path) {
+                      window.location.hash = path;
+                    })(encodedPath);
+                  var prevIndex = allPaths.lastIndexOf(
+                      createPath(history.location)
+                    ),
+                    nextPaths = allPaths.slice(
+                      0,
+                      -1 === prevIndex ? 0 : prevIndex + 1
+                    );
+                  nextPaths.push(path),
+                    (allPaths = nextPaths),
+                    setState({ action: "PUSH", location: location });
+                } else setState();
+              }
+            }
+          );
+        },
+        replace: function(path, state) {
+          var location = createLocation(path, void 0, void 0, history.location);
+          transitionManager.confirmTransitionTo(
+            location,
+            "REPLACE",
+            getUserConfirmation,
+            function(ok) {
+              if (ok) {
+                var path = createPath(location),
+                  encodedPath = encodePath(basename + path);
+                getHashPath() !== encodedPath &&
+                  ((ignorePath = path), replaceHashPath(encodedPath));
+                var prevIndex = allPaths.indexOf(createPath(history.location));
+                -1 !== prevIndex && (allPaths[prevIndex] = path),
+                  setState({ action: "REPLACE", location: location });
+              }
+            }
+          );
+        },
+        go: go,
+        goBack: function() {
+          go(-1);
+        },
+        goForward: function() {
+          go(1);
+        },
+        block: function(prompt) {
+          void 0 === prompt && (prompt = !1);
+          var unblock = transitionManager.setPrompt(prompt);
+          return (
+            isBlocked || (checkDOMListeners(1), (isBlocked = !0)),
+            function() {
+              return (
+                isBlocked && ((isBlocked = !1), checkDOMListeners(-1)),
+                unblock()
+              );
+            }
+          );
+        },
+        listen: function(listener) {
+          var unlisten = transitionManager.appendListener(listener);
+          return (
+            checkDOMListeners(1),
+            function() {
+              checkDOMListeners(-1), unlisten();
+            }
+          );
+        }
+      };
+      return history;
+    }
     function clamp(n, lowerBound, upperBound) {
       return Math.min(Math.max(n, lowerBound), upperBound);
     }
-    var lib = __webpack_require__(4),
-      lib_default = __webpack_require__.n(lib);
     function _inheritsLoose(subClass, superClass) {
       (subClass.prototype = Object.create(superClass.prototype)),
         (subClass.prototype.constructor = subClass),
@@ -1586,9 +2060,11 @@ object-assign
     }
     var react = __webpack_require__(0),
       react_default = __webpack_require__.n(react),
-      path_to_regexp = (__webpack_require__(2), __webpack_require__(1)),
+      lib = __webpack_require__(5),
+      lib_default = __webpack_require__.n(lib),
+      path_to_regexp = (__webpack_require__(1), __webpack_require__(2)),
       path_to_regexp_default = __webpack_require__.n(path_to_regexp);
-    __webpack_require__(3);
+    __webpack_require__(4);
     function _objectWithoutPropertiesLoose(source, excluded) {
       if (null == source) return {};
       var key,
@@ -1600,7 +2076,7 @@ object-assign
           excluded.indexOf(key) >= 0 || (target[key] = source[key]);
       return target;
     }
-    __webpack_require__(5);
+    __webpack_require__(6);
     var react_router_context = (function(name) {
         var context = lib_default()();
         return (
@@ -1740,224 +2216,70 @@ object-assign
     function noop() {}
     react_default.a.Component;
     react_default.a.Component;
-    console.log(function(props) {
-      void 0 === props && (props = {}), canUseDOM || tiny_invariant_esm(!1);
-      var ua,
-        globalHistory = window.history,
-        canUseHistory =
-          ((-1 === (ua = window.navigator.userAgent).indexOf("Android 2.") &&
-            -1 === ua.indexOf("Android 4.0")) ||
-            -1 === ua.indexOf("Mobile Safari") ||
-            -1 !== ua.indexOf("Chrome") ||
-            -1 !== ua.indexOf("Windows Phone")) &&
-          window.history &&
-          "pushState" in window.history,
-        needsHashChangeListener = !(
-          -1 === window.navigator.userAgent.indexOf("Trident")
-        ),
-        _props = props,
-        _props$forceRefresh = _props.forceRefresh,
-        forceRefresh = void 0 !== _props$forceRefresh && _props$forceRefresh,
-        _props$getUserConfirm = _props.getUserConfirmation,
-        getUserConfirmation =
-          void 0 === _props$getUserConfirm
-            ? getConfirmation
-            : _props$getUserConfirm,
-        _props$keyLength = _props.keyLength,
-        keyLength = void 0 === _props$keyLength ? 6 : _props$keyLength,
-        basename = props.basename
-          ? stripTrailingSlash(addLeadingSlash(props.basename))
-          : "";
-      function getDOMLocation(historyState) {
-        var _ref = historyState || {},
-          key = _ref.key,
-          state = _ref.state,
-          _window$location = window.location,
-          path =
-            _window$location.pathname +
-            _window$location.search +
-            _window$location.hash;
-        return (
-          basename && (path = stripBasename(path, basename)),
-          createLocation(path, state, key)
-        );
+    react_default.a.Component;
+    react_default.a.Component;
+    var react_router_dom_Link = (function(_React$Component) {
+      function Link() {
+        return _React$Component.apply(this, arguments) || this;
       }
-      function createKey() {
-        return Math.random()
-          .toString(36)
-          .substr(2, keyLength);
-      }
-      var transitionManager = createTransitionManager();
-      function setState(nextState) {
-        _extends(history, nextState),
-          (history.length = globalHistory.length),
-          transitionManager.notifyListeners(history.location, history.action);
-      }
-      function handlePopState(event) {
-        (function(event) {
-          void 0 === event.state && navigator.userAgent.indexOf("CriOS");
-        })(event) || handlePop(getDOMLocation(event.state));
-      }
-      function handleHashChange() {
-        handlePop(getDOMLocation(getHistoryState()));
-      }
-      var forceNextPop = !1;
-      function handlePop(location) {
-        forceNextPop
-          ? ((forceNextPop = !1), setState())
-          : transitionManager.confirmTransitionTo(
-              location,
-              "POP",
-              getUserConfirmation,
-              function(ok) {
-                ok
-                  ? setState({ action: "POP", location: location })
-                  : (function(fromLocation) {
-                      var toLocation = history.location,
-                        toIndex = allKeys.indexOf(toLocation.key);
-                      -1 === toIndex && (toIndex = 0);
-                      var fromIndex = allKeys.indexOf(fromLocation.key);
-                      -1 === fromIndex && (fromIndex = 0);
-                      var delta = toIndex - fromIndex;
-                      delta && ((forceNextPop = !0), go(delta));
-                    })(location);
-              }
-            );
-      }
-      var initialLocation = getDOMLocation(getHistoryState()),
-        allKeys = [initialLocation.key];
-      function createHref(location) {
-        return basename + createPath(location);
-      }
-      function go(n) {
-        globalHistory.go(n);
-      }
-      var listenerCount = 0;
-      function checkDOMListeners(delta) {
-        1 === (listenerCount += delta)
-          ? (window.addEventListener(PopStateEvent, handlePopState),
-            needsHashChangeListener &&
-              window.addEventListener(HashChangeEvent, handleHashChange))
-          : 0 === listenerCount &&
-            (window.removeEventListener(PopStateEvent, handlePopState),
-            needsHashChangeListener &&
-              window.removeEventListener(HashChangeEvent, handleHashChange));
-      }
-      var isBlocked = !1,
-        history = {
-          length: globalHistory.length,
-          action: "POP",
-          location: initialLocation,
-          createHref: createHref,
-          push: function(path, state) {
-            var location = createLocation(
-              path,
-              state,
-              createKey(),
-              history.location
-            );
-            transitionManager.confirmTransitionTo(
-              location,
-              "PUSH",
-              getUserConfirmation,
-              function(ok) {
-                if (ok) {
-                  var href = createHref(location),
-                    key = location.key,
-                    state = location.state;
-                  if (canUseHistory)
-                    if (
-                      (globalHistory.pushState(
-                        { key: key, state: state },
-                        null,
-                        href
-                      ),
-                      forceRefresh)
-                    )
-                      window.location.href = href;
-                    else {
-                      var prevIndex = allKeys.indexOf(history.location.key),
-                        nextKeys = allKeys.slice(
-                          0,
-                          -1 === prevIndex ? 0 : prevIndex + 1
-                        );
-                      nextKeys.push(location.key),
-                        (allKeys = nextKeys),
-                        setState({ action: "PUSH", location: location });
-                    }
-                  else window.location.href = href;
-                }
-              }
-            );
-          },
-          replace: function(path, state) {
-            var location = createLocation(
-              path,
-              state,
-              createKey(),
-              history.location
-            );
-            transitionManager.confirmTransitionTo(
-              location,
-              "REPLACE",
-              getUserConfirmation,
-              function(ok) {
-                if (ok) {
-                  var href = createHref(location),
-                    key = location.key,
-                    state = location.state;
-                  if (canUseHistory)
-                    if (
-                      (globalHistory.replaceState(
-                        { key: key, state: state },
-                        null,
-                        href
-                      ),
-                      forceRefresh)
-                    )
-                      window.location.replace(href);
-                    else {
-                      var prevIndex = allKeys.indexOf(history.location.key);
-                      -1 !== prevIndex && (allKeys[prevIndex] = location.key),
-                        setState({ action: "REPLACE", location: location });
-                    }
-                  else window.location.replace(href);
-                }
-              }
-            );
-          },
-          go: go,
-          goBack: function() {
-            go(-1);
-          },
-          goForward: function() {
-            go(1);
-          },
-          block: function(prompt) {
-            void 0 === prompt && (prompt = !1);
-            var unblock = transitionManager.setPrompt(prompt);
-            return (
-              isBlocked || (checkDOMListeners(1), (isBlocked = !0)),
-              function() {
-                return (
-                  isBlocked && ((isBlocked = !1), checkDOMListeners(-1)),
-                  unblock()
-                );
-              }
-            );
-          },
-          listen: function(listener) {
-            var unlisten = transitionManager.appendListener(listener);
-            return (
-              checkDOMListeners(1),
-              function() {
-                checkDOMListeners(-1), unlisten();
-              }
-            );
-          }
-        };
-      return history;
-    }),
-      console.log(react_router_Router);
+      _inheritsLoose(Link, _React$Component);
+      var _proto = Link.prototype;
+      return (
+        (_proto.handleClick = function(event, history) {
+          (this.props.onClick && this.props.onClick(event),
+          event.defaultPrevented ||
+            0 !== event.button ||
+            (this.props.target && "_self" !== this.props.target) ||
+            (function(event) {
+              return !!(
+                event.metaKey ||
+                event.altKey ||
+                event.ctrlKey ||
+                event.shiftKey
+              );
+            })(event)) ||
+            (event.preventDefault(),
+            (this.props.replace ? history.replace : history.push)(
+              this.props.to
+            ));
+        }),
+        (_proto.render = function() {
+          var _this = this,
+            _this$props = this.props,
+            innerRef = _this$props.innerRef,
+            to = (_this$props.replace, _this$props.to),
+            rest = _objectWithoutPropertiesLoose(_this$props, [
+              "innerRef",
+              "replace",
+              "to"
+            ]);
+          return react_default.a.createElement(
+            react_router_context.Consumer,
+            null,
+            function(context) {
+              context || tiny_invariant_esm(!1);
+              var location =
+                  "string" == typeof to
+                    ? createLocation(to, null, null, context.location)
+                    : to,
+                href = location ? context.history.createHref(location) : "";
+              return react_default.a.createElement(
+                "a",
+                _extends({}, rest, {
+                  onClick: function(event) {
+                    return _this.handleClick(event, context.history);
+                  },
+                  href: href,
+                  ref: innerRef
+                })
+              );
+            }
+          );
+        }),
+        Link
+      );
+    })(react_default.a.Component);
+    console.log(createBrowserHistory),
+      console.log(react_router_dom_Link, react_router_Router);
   }
 ]);
