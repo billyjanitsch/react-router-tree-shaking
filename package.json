@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack-command && prettier --write dist/main.js"
+    "build": "rollup --config && prettier --write dist/main.js"
   },
   "keywords": [],
   "author": "Billy Janitsch <billy@kensho.com> (https://billyjanitsch.com/)",
@@ -15,8 +15,10 @@
   },
   "devDependencies": {
     "prettier": "^1.16.4",
-    "terser-webpack-plugin": "^1.2.3",
-    "webpack": "^4.29.6",
-    "webpack-command": "^0.4.2"
+    "rollup": "^1.6.0",
+    "rollup-plugin-commonjs": "^9.2.1",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-terser": "^4.0.4"
   }
 }
