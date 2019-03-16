@@ -1342,17 +1342,6 @@ object-assign
   },
   function(module, __webpack_exports__, __webpack_require__) {
     "use strict";
-    function _inheritsLoose(subClass, superClass) {
-      (subClass.prototype = Object.create(superClass.prototype)),
-        (subClass.prototype.constructor = subClass),
-        (subClass.__proto__ = superClass);
-    }
-    __webpack_require__.r(__webpack_exports__);
-    var react = __webpack_require__(0),
-      react_default = __webpack_require__.n(react),
-      lib = __webpack_require__(5),
-      lib_default = __webpack_require__.n(lib);
-    __webpack_require__(1);
     function _extends() {
       return (_extends =
         Object.assign ||
@@ -1374,6 +1363,7 @@ object-assign
         list[i] = list[k];
       list.pop();
     }
+    __webpack_require__.r(__webpack_exports__);
     var resolve_pathname = function(to) {
         var from =
             arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "",
@@ -2063,7 +2053,16 @@ object-assign
     function clamp(n, lowerBound, upperBound) {
       return Math.min(Math.max(n, lowerBound), upperBound);
     }
-    var path_to_regexp = __webpack_require__(2),
+    function _inheritsLoose(subClass, superClass) {
+      (subClass.prototype = Object.create(superClass.prototype)),
+        (subClass.prototype.constructor = subClass),
+        (subClass.__proto__ = superClass);
+    }
+    var react = __webpack_require__(0),
+      react_default = __webpack_require__.n(react),
+      lib = __webpack_require__(5),
+      lib_default = __webpack_require__.n(lib),
+      path_to_regexp = (__webpack_require__(1), __webpack_require__(2)),
       path_to_regexp_default = __webpack_require__.n(path_to_regexp);
     __webpack_require__(4);
     function _objectWithoutPropertiesLoose(source, excluded) {
@@ -2193,7 +2192,59 @@ object-assign
             };
       }, null);
     }
-    react_default.a.Component;
+    var react_router_Route = (function(_React$Component) {
+      function Route() {
+        return _React$Component.apply(this, arguments) || this;
+      }
+      return (
+        _inheritsLoose(Route, _React$Component),
+        (Route.prototype.render = function() {
+          var _this = this;
+          return react_default.a.createElement(
+            react_router_context.Consumer,
+            null,
+            function(context$$1) {
+              context$$1 || tiny_invariant_esm(!1);
+              var location = _this.props.location || context$$1.location,
+                props = _extends({}, context$$1, {
+                  location: location,
+                  match: _this.props.computedMatch
+                    ? _this.props.computedMatch
+                    : _this.props.path
+                    ? matchPath(location.pathname, _this.props)
+                    : context$$1.match
+                }),
+                _this$props = _this.props,
+                children = _this$props.children,
+                component = _this$props.component,
+                render = _this$props.render;
+              (Array.isArray(children) &&
+                0 === children.length &&
+                (children = null),
+              "function" == typeof children) &&
+                (void 0 === (children = children(props)) && (children = null));
+              return react_default.a.createElement(
+                react_router_context.Provider,
+                { value: props },
+                children &&
+                  !(function(children) {
+                    return 0 === react_default.a.Children.count(children);
+                  })(children)
+                  ? children
+                  : props.match
+                  ? component
+                    ? react_default.a.createElement(component, props)
+                    : render
+                    ? render(props)
+                    : null
+                  : null
+              );
+            }
+          );
+        }),
+        Route
+      );
+    })(react_default.a.Component);
     function react_router_addLeadingSlash(path) {
       return "/" === path.charAt(0) ? path : "/" + path;
     }
@@ -2217,36 +2268,148 @@ object-assign
     function noop() {}
     react_default.a.Component;
     react_default.a.Component;
-    var react_router_dom_BrowserRouter = (function(_React$Component) {
-      function BrowserRouter() {
-        for (
-          var _this, _len = arguments.length, args = new Array(_len), _key = 0;
-          _key < _len;
-          _key++
-        )
-          args[_key] = arguments[_key];
-        return (
-          ((_this =
-            _React$Component.call.apply(
-              _React$Component,
-              [this].concat(args)
-            ) || this).history = createBrowserHistory(_this.props)),
-          _this
-        );
+    react_default.a.Component;
+    react_default.a.Component;
+    var react_router_dom_Link = (function(_React$Component) {
+      function Link() {
+        return _React$Component.apply(this, arguments) || this;
       }
+      _inheritsLoose(Link, _React$Component);
+      var _proto = Link.prototype;
       return (
-        _inheritsLoose(BrowserRouter, _React$Component),
-        (BrowserRouter.prototype.render = function() {
-          return react_default.a.createElement(react_router_Router, {
-            history: this.history,
-            children: this.props.children
-          });
+        (_proto.handleClick = function(event, history) {
+          (this.props.onClick && this.props.onClick(event),
+          event.defaultPrevented ||
+            0 !== event.button ||
+            (this.props.target && "_self" !== this.props.target) ||
+            (function(event) {
+              return !!(
+                event.metaKey ||
+                event.altKey ||
+                event.ctrlKey ||
+                event.shiftKey
+              );
+            })(event)) ||
+            (event.preventDefault(),
+            (this.props.replace ? history.replace : history.push)(
+              this.props.to
+            ));
         }),
-        BrowserRouter
+        (_proto.render = function() {
+          var _this = this,
+            _this$props = this.props,
+            innerRef = _this$props.innerRef,
+            to = (_this$props.replace, _this$props.to),
+            rest = _objectWithoutPropertiesLoose(_this$props, [
+              "innerRef",
+              "replace",
+              "to"
+            ]);
+          return react_default.a.createElement(
+            react_router_context.Consumer,
+            null,
+            function(context) {
+              context || tiny_invariant_esm(!1);
+              var location =
+                  "string" == typeof to
+                    ? createLocation(to, null, null, context.location)
+                    : to,
+                href = location ? context.history.createHref(location) : "";
+              return react_default.a.createElement(
+                "a",
+                _extends({}, rest, {
+                  onClick: function(event) {
+                    return _this.handleClick(event, context.history);
+                  },
+                  href: href,
+                  ref: innerRef
+                })
+              );
+            }
+          );
+        }),
+        Link
       );
     })(react_default.a.Component);
-    react_default.a.Component;
-    react_default.a.Component;
-    console.log(react_router_dom_BrowserRouter);
+    const src_history = createBrowserHistory();
+    console.log(
+      function(_ref) {
+        var _ref$ariaCurrent = _ref["aria-current"],
+          ariaCurrent = void 0 === _ref$ariaCurrent ? "page" : _ref$ariaCurrent,
+          _ref$activeClassName = _ref.activeClassName,
+          activeClassName =
+            void 0 === _ref$activeClassName ? "active" : _ref$activeClassName,
+          activeStyle = _ref.activeStyle,
+          classNameProp = _ref.className,
+          exact = _ref.exact,
+          isActiveProp = _ref.isActive,
+          location = _ref.location,
+          strict = _ref.strict,
+          styleProp = _ref.style,
+          to = _ref.to,
+          rest = _objectWithoutPropertiesLoose(_ref, [
+            "aria-current",
+            "activeClassName",
+            "activeStyle",
+            "className",
+            "exact",
+            "isActive",
+            "location",
+            "strict",
+            "style",
+            "to"
+          ]),
+          path = "object" == typeof to ? to.pathname : to,
+          escapedPath =
+            path && path.replace(/([.+*?=^!:${}()[\]|\/\\])/g, "\\$1");
+        return react_default.a.createElement(react_router_Route, {
+          path: escapedPath,
+          exact: exact,
+          strict: strict,
+          location: location,
+          children: function(_ref2) {
+            var location = _ref2.location,
+              match = _ref2.match,
+              isActive = !!(isActiveProp
+                ? isActiveProp(match, location)
+                : match),
+              className = isActive
+                ? (function() {
+                    for (
+                      var _len = arguments.length,
+                        classnames = new Array(_len),
+                        _key = 0;
+                      _key < _len;
+                      _key++
+                    )
+                      classnames[_key] = arguments[_key];
+                    return classnames
+                      .filter(function(i) {
+                        return i;
+                      })
+                      .join(" ");
+                  })(classNameProp, activeClassName)
+                : classNameProp,
+              style = isActive
+                ? _extends({}, styleProp, activeStyle)
+                : styleProp;
+            return react_default.a.createElement(
+              react_router_dom_Link,
+              _extends(
+                {
+                  "aria-current": (isActive && ariaCurrent) || null,
+                  className: className,
+                  style: style,
+                  to: to
+                },
+                rest
+              )
+            );
+          }
+        });
+      },
+      react_router_Router,
+      src_history
+    );
   }
 ]);
